@@ -1,4 +1,4 @@
-
+let userId;
 let users = [];
 function showLogin() {
   fetch("https://jsonplaceholder.typicode.com/users/")
@@ -8,13 +8,79 @@ function showLogin() {
 }
 
 function showPosts(id) {
-  
-  content.innerHTML = id
+  let str = ""
+  //console.log(`https://jsonplaceholder.typicode.com/posts/userId=${id}`)
+  fetch(`https://jsonplaceholder.typicode.com/posts/?userId=${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      data && data.map((value) => {
+        str += `<div>
+        <b>${value.title}</b>
+        <p>${value.body}</p>
+        </div>`;
+      });
+      content.innerHTML = str;
+    })
+    .catch((err) => console.log(err));
+}
+function showAlbum() {
+  let str = ""
+  fetch(`https://jsonplaceholder.typicode.com/albums`)
+    .then((res) => res.json())
+    .then((data) => {
+      data && data.map((value) => {
+        str += `<div>
+        <b>${value.title}</b>
+        </div>`;
+      });
+      content.innerHTML = str;
+    }
+    ) .catch((err) => console.log(err));    
+}
+function showProfile(id) {
+  let str = ""
+  fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+        str += `<div>
+        <b>${data.name}</b>
+        <p>${data.email}</p>
+        <p>${data.phone}</p>
+        <p>${data.website}</p>
+        <p>${data.company.name}</p>
+        <p>${data.company.catchPhrase}</p>
+        <p>${data.company.bs}</p>
+        <p>${data.address.street}</p>
+        <p>${data.address.suite}</p>
+        <p>${data.address.city}</p>
+        <p>${data.address.zipcode}</p>
+        <p>${data.address.geo.lat}</p>
+        <p>${data.address.geo.lng}</p>
+        
+      
+        </div>`;
+      content.innerHTML = str;
+    })
+     .catch((err) => console.log(err));
 }
 
+function showToDo() {
+  let str = ""
+  fetch(`https://jsonplaceholder.typicode.com/todos`) 
+    .then((res) => res.json())
+    .then((data) => {
+      data && data.map((value) => {
+        str += `<div>
+        <b>${value.title}</b>
+        </div>`;
+      });
+      content.innerHTML = str;
+    }
+    ) .catch((err) => console.log(err));
+}
 
 function showHome() {
-  let userId = selUser.value;
+  userId = selUser.value;
   let str = `
    <div class='container-fluid'>
      <div class='row'>
@@ -26,9 +92,11 @@ function showHome() {
      <div class='row'>
       <div class='d-flex'>
        <div class='p-2'>
-         <p>Home</p>
-         <p>Album</p>
-         <p onclick='showLogin()'>Logout</p>
+         <p onclick= "showPosts(${userId})"><a href="#">Home</a></p>
+         <p onclick= "showAlbum(${userId})"><a href="#">Album</a></p>
+          <p onclick= "showProfile(${userId})"><a href="#">Profile</a></p>
+          <p onclick= "showToDo(${userId})"><a href="#">ToDo</a></p>
+         <p onclick= "showLogin()"><a href="#">Logout</a></p>
        </div>
        <div class='p-2' id='content'></div>
       </div>
@@ -41,7 +109,7 @@ function showHome() {
    </div>
   `;
   root.innerHTML = str;
-  showPosts(userId)
+  showPosts(userId);
 }
 
 function displayUsers(data) {
