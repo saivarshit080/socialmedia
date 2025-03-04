@@ -1,25 +1,36 @@
 
 let users = [];
 function showLogin() {
-  fetch("https://jsonplaceholder.typicode.com/users")
+  fetch("https://jsonplaceholder.typicode.com/users/")
     .then((res) => res.json())
     .then((data) => displayUsers(data))
     .catch((err) => console.log(err));
 }
 
+function showPosts(id) {
+  
+  content.innerHTML = id
+}
+
+
 function showHome() {
+  let userId = selUser.value;
   let str = `
    <div class='container-fluid'>
      <div class='row'>
       <div class='d-flex justify-content-between bg-primary text-light'>
        <div>My Social Media</div>
-       <div>Username</div>
+       <div id='username'></div>
       </div>
      </div>
      <div class='row'>
       <div class='d-flex'>
-       <div class='p-2'>Menu</div>
-       <div class='p-2'>Content</div>
+       <div class='p-2'>
+         <p>Home</p>
+         <p>Album</p>
+         <p onclick='showLogin()'>Logout</p>
+       </div>
+       <div class='p-2' id='content'></div>
       </div>
      </div>
      <div class='row'>
@@ -29,7 +40,8 @@ function showHome() {
      </div>
    </div>
   `;
-  root.innerHTML = str
+  root.innerHTML = str;
+  showPosts(userId)
 }
 
 function displayUsers(data) {
@@ -40,7 +52,7 @@ function displayUsers(data) {
   <p>This is the caption of the website.</p>
   </div>
   <div class='p-5'>
-  <select class='form-control m-3'>
+  <select class='form-control m-3' id='selUser'>
   <option value='0'>--Select User--</option>`;
   data.map((value) => {
     str += `<option value=${value.id}>${value.name}</option>`;
